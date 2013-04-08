@@ -4,7 +4,7 @@
 
 	<groupId>jabaraster</groupId>
 	<artifactId>jabara-wicket</artifactId>
-	<version>0.3</version>
+	<version>0.4</version>
 	<packaging>jar</packaging>
 
 	<name>jabara-wicket</name>
@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>jabaraster</groupId>
 			<artifactId>jabara-general</artifactId>
-			<version>1.1</version>
+			<version>1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>

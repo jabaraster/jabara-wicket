@@ -9,9 +9,9 @@
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" sourcepath="M2_REPO/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.1.Final/hibernate-jpa-2.0-api-1.0.1.Final.jar" sourcepath="M2_REPO/org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.1.Final/hibernate-jpa-2.0-api-1.0.1.Final-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/jabaraster/jabara-general/1.1/jabara-general-1.1.jar" sourcepath="M2_REPO/jabaraster/jabara-general/1.1/jabara-general-1.1-sources.jar">
+  <classpathentry kind="var" path="M2_REPO/jabaraster/jabara-general/1.2/jabara-general-1.2.jar" sourcepath="M2_REPO/jabaraster/jabara-general/1.2/jabara-general-1.2-sources.jar">
     <attributes>
-      <attribute value="jar:file:/Users/jabaraster/.m2/repository/jabaraster/jabara-general/1.1/jabara-general-1.1-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/Users/jabaraster/.m2/repository/jabaraster/jabara-general/1.2/jabara-general-1.2-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/junit/junit/4.10/junit-4.10.jar" sourcepath="M2_REPO/junit/junit/4.10/junit-4.10-sources.jar">
