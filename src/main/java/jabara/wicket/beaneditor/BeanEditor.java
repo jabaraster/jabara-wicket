@@ -42,6 +42,13 @@ public class BeanEditor<E> extends Panel {
         this.add(getProperties());
     }
 
+    /**
+     * @return 編集中のオブジェクト.
+     */
+    public E getBean() {
+        return this.bean;
+    }
+
     private Loop getProperties() {
         if (this.properties == null) {
             this.properties = new Loop("properties", this.propertiesModel.size()) { //$NON-NLS-1$
