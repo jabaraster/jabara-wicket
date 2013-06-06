@@ -78,12 +78,7 @@ public final class ValidatorUtil {
     }
 
     private static <T> IValidator<String> createStringValidator(final Size pSize) {
-        try {
-            return new StringValidator(Integer.valueOf(pSize.min()), Integer.valueOf(pSize.max()));
-
-        } catch (final Exception e) {
-            throw ExceptionUtil.rethrow(e);
-        }
+        return new StringValidator(Integer.valueOf(pSize.min()), Integer.valueOf(pSize.max()));
     }
 
     private static Field getField(final Class<?> pCheckTargetObjectType, final String pPropertyName) {
@@ -104,8 +99,6 @@ public final class ValidatorUtil {
     }
 
     private static <T> boolean isRequired(final Class<T> pCheckTargetObjectType, final String pPropertyName) {
-        ArgUtil.checkNull(pCheckTargetObjectType, "pCheckTargetObjectType"); //$NON-NLS-1$
-        ArgUtil.checkNull(pPropertyName, "pPropertyName"); //$NON-NLS-1$
         final Field field = getField(pCheckTargetObjectType, pPropertyName);
         return field.isAnnotationPresent(NotNull.class);
     }
