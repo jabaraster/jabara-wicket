@@ -58,7 +58,7 @@ public class BeanEditor<E> extends Panel {
                 protected void populateItem(final LoopItem pItem) {
                     final BeanProperty property = BeanEditor.this.propertiesValue.get(pItem.getIndex());
                     pItem.add(new Label("label", property.getLocalizedName())); //$NON-NLS-1$
-                    pItem.add(new PropertyEditor<E>("property", BeanEditor.this.bean, property)); //$NON-NLS-1$
+                    pItem.add(new PropertyEditor("property", BeanEditor.this.bean, property)); //$NON-NLS-1$
                 }
             };
 

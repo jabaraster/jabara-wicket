@@ -14,15 +14,15 @@ import org.apache.wicket.markup.html.form.EnumChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
 /**
- * @param <E>
+ * @param <E> 選択対象の列挙型.
  * @author jabaraster
  */
 public abstract class EnumDropDownChoice<E extends Enum<E>> extends DropDownChoice<E> {
     private static final long serialVersionUID = -4616569102818789301L;
 
     /**
-     * @param pId
-     * @param pInitialValueModel
+     * @param pId -
+     * @param pInitialValueModel -
      */
     public EnumDropDownChoice(final String pId, final IModel<E> pInitialValueModel) {
         super(pId);

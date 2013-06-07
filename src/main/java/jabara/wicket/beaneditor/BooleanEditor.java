@@ -16,8 +16,8 @@ public class BooleanEditor extends Panel {
     private CheckBox          editor;
 
     /**
-     * @param pId
-     * @param pModel
+     * @param pId -
+     * @param pModel -
      */
     public BooleanEditor(final String pId, final IModel<Boolean> pModel) {
         super(pId, pModel);

@@ -27,6 +27,35 @@ public final class ValidatorUtil {
     }
 
     /**
+     * 文字列入力用コンポーネントの基本的な入力チェックを追加します. <br>
+     * 対象のフィールドにアノテーション{@link Size}が付与されている必要があります. <br>
+     * アノテーション{@link NotNull}が付与されている場合、{@link FormComponent#setRequired(boolean)}にtrueがセットされます. <br>
+     * <br>
+     * 現在の仕様では、型Tの<strong>サブクラス</strong>のフィールドに対して処理出来ません. <br>
+     * フィールドが定義されている型そのもののClassオブジェクトを指定するようにして下さい. <br>
+     * 
+     * @param pComponent Wicketの入力コンポーネント.
+     * @param pCheckTargetObjectType チェック対象オブジェクトの型.
+     * @param pPropertyName チェック対象プロパティ.
+     * @return 追加したチェックに関する情報.
+     */
+    public static ValidatorInfo setSimpleStringValidator( //
+            final FormComponent<String> pComponent //
+            , final Class<?> pCheckTargetObjectType //
+            , final String pPropertyName) {
+
+        ArgUtil.checkNull(pComponent, "pComponent"); //$NON-NLS-1$
+        ArgUtil.checkNull(pCheckTargetObjectType, "pCheckTargetObjectType"); //$NON-NLS-1$
+        ArgUtil.checkNullOrEmpty(pPropertyName, "pPropertyName"); //$NON-NLS-1$
+
+        final boolean required = isRequired(pCheckTargetObjectType, pPropertyName);
+        final Size size = getSizeAnnotation(pCheckTargetObjectType, pPropertyName);
+        pComponent.setRequired(required);
+        pComponent.add(createStringValidator(size));
+        return new ValidatorInfo(required, size);
+    }
+
+    /**
      * {@link #setSimpleStringValidator(FormComponent, Class, String)}と同じ効果です.
      * 
      * @param <T> チェック対象オブジェクトの型.
@@ -45,36 +74,6 @@ public final class ValidatorUtil {
         ArgUtil.checkNull(pPropertyName, "pPropertyName"); //$NON-NLS-1$
 
         return setSimpleStringValidator(pComponent, pCheckTargetObjectType, pPropertyName.getName());
-    }
-
-    /**
-     * 文字列入力用コンポーネントの基本的な入力チェックを追加します. <br>
-     * 対象のフィールドにアノテーション{@link Size}が付与されている必要があります. <br>
-     * アノテーション{@link NotNull}が付与されている場合、{@link FormComponent#setRequired(boolean)}にtrueがセットされます. <br>
-     * <br>
-     * 現在の仕様では、型Tの<strong>サブクラス</strong>のフィールドに対して処理出来ません. <br>
-     * フィールドが定義されている型そのもののClassオブジェクトを指定するようにして下さい. <br>
-     * 
-     * @param <T> チェック対象オブジェクトの型.
-     * @param pComponent Wicketの入力コンポーネント.
-     * @param pCheckTargetObjectType チェック対象オブジェクトの型.
-     * @param pPropertyName チェック対象プロパティ.
-     * @return 追加したチェックに関する情報.
-     */
-    public static <T> ValidatorInfo setSimpleStringValidator( //
-            final FormComponent<String> pComponent //
-            , final Class<T> pCheckTargetObjectType //
-            , final String pPropertyName) {
-
-        ArgUtil.checkNull(pComponent, "pComponent"); //$NON-NLS-1$
-        ArgUtil.checkNull(pCheckTargetObjectType, "pCheckTargetObjectType"); //$NON-NLS-1$
-        ArgUtil.checkNullOrEmpty(pPropertyName, "pPropertyName"); //$NON-NLS-1$
-
-        final boolean required = isRequired(pCheckTargetObjectType, pPropertyName);
-        final Size size = getSizeAnnotation(pCheckTargetObjectType, pPropertyName);
-        pComponent.setRequired(required);
-        pComponent.add(createStringValidator(size));
-        return new ValidatorInfo(required, size);
     }
 
     private static <T> IValidator<String> createStringValidator(final Size pSize) {
@@ -113,8 +112,8 @@ public final class ValidatorUtil {
         private final Size        size;
 
         /**
-         * @param pRequired
-         * @param pSize
+         * @param pRequired -
+         * @param pSize -
          */
         public ValidatorInfo(final boolean pRequired, final Size pSize) {
             this.required = pRequired;
