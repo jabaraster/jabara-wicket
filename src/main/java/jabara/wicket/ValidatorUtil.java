@@ -5,6 +5,7 @@ package jabara.wicket;
 
 import jabara.general.ArgUtil;
 import jabara.general.ExceptionUtil;
+import jabara.general.NotFound;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -51,7 +52,9 @@ public final class ValidatorUtil {
         final boolean required = isRequired(pCheckTargetObjectType, pPropertyName);
         final Size size = getSizeAnnotation(pCheckTargetObjectType, pPropertyName);
         pComponent.setRequired(required);
-        pComponent.add(createStringValidator(size));
+        if (size != null) {
+            pComponent.add(createStringValidator(size));
+        }
         return new ValidatorInfo(required, size);
     }
 
@@ -90,11 +93,7 @@ public final class ValidatorUtil {
 
     private static <T> Size getSizeAnnotation(final Class<T> pCheckTargetObjectType, final String pPropertyName) {
         final Field field = getField(pCheckTargetObjectType, pPropertyName);
-        final Size size = field.getAnnotation(Size.class);
-        if (size == null) {
-            throw new IllegalStateException("@" + Size.class.getSimpleName() + "がフィールドに付与されている必要があります."); //$NON-NLS-1$//$NON-NLS-2$
-        }
-        return size;
+        return field.getAnnotation(Size.class);
     }
 
     private static <T> boolean isRequired(final Class<T> pCheckTargetObjectType, final String pPropertyName) {
@@ -122,8 +121,12 @@ public final class ValidatorUtil {
 
         /**
          * @return sizeを返す.
+         * @throws NotFound -
          */
-        public Size getSize() {
+        public Size getSize() throws NotFound {
+            if (this.size == null) {
+                throw NotFound.GLOBAL;
+            }
             return this.size;
         }
 

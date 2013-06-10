@@ -1,12 +1,41 @@
+<head>
+  <meta charset="UTF-8" />
+  <link href="bootstrap.min.css" type="text/css" rel="stylesheet" />
+  <link href="BeanEditor.css" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
 <wicket:panel>
 
-  <ul>
-    <li wicket:id="properties">
-      <span wicket:id="label"></span>
-      <div class="propertyValueArea">
-        <wicket:container wicket:id="property" />
+  <ul class="BeanEditor">
+    <li wicket:id="properties" class="properties">
+      <span wicket:id="label" class="label">ユーザID</span>
+      <span wicket:id="property" class="value"><input type="text" /></span>
+      <div wicket:id="feedback" class="feedback">
+        <ul class="feedbackPanel">
+          <li class="feedbackPanelERROR">
+            <span class="feedbackPanelERROR">textは必須入力です。</span>
+          </li>
+        </ul>
       </div>
     </li>
+    <wicket:remove>
+      <li class="properties">
+        <span class="label">パスワード</span>
+        <span class="value"><input type="password" /></span>
+        <div class="feedback">
+          <ul class="feedbackPanel">
+            <li class="feedbackPanelERROR">
+              <span class="feedbackPanelERROR">passwordは必須入力です。</span>
+            </li>
+            <li class="feedbackPanelERROR">
+              <span class="feedbackPanelERROR">エラーメッセージのテストのために２行表示します。</span>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </wicket:remove>
   </ul>
 
 </wicket:panel>
+</body>

@@ -78,7 +78,6 @@ public class DefaultPropertyEditorComponentProvider implements IPropertyEditorCo
                 ValidatorUtil.setSimpleStringValidator(text, pProperty.getBeanType(), pProperty.getName());
 
             } else if (propertyType.isPrimitive()) {
-
                 text.setRequired(true);
             }
 
