@@ -7,10 +7,11 @@
 <body>
 <wicket:panel>
 
-  <ul class="BeanEditor inputs">
+<div class="BeanEditor">
+  <ul>
     <li wicket:id="properties" class="properties">
       <span wicket:id="label" class="label">ユーザID</span>
-      <span wicket:id="property"><input type="text" /></span>
+      <span wicket:id="property" class="value"><input type="text" /></span>
       <div wicket:id="feedback">
         <ul class="feedbackPanel">
           <li class="feedbackPanelERROR">
@@ -36,6 +37,7 @@
       </li>
     </wicket:remove>
   </ul>
+</div>
 
 </wicket:panel>
 </body>
