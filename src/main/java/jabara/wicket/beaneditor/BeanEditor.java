@@ -8,14 +8,11 @@ import jabara.bean.BeanProperty;
 import jabara.general.ArgUtil;
 
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.request.resource.CssResourceReference;
 
 /**
  * @param <E> 編集対象オブジェクトの型.
@@ -52,16 +49,6 @@ public class BeanEditor<E> extends Panel {
      */
     public E getBean() {
         return this.bean;
-    }
-
-    /**
-     * @see org.apache.wicket.Component#renderHead(org.apache.wicket.markup.head.IHeaderResponse)
-     */
-    @Override
-    public void renderHead(final IHeaderResponse pResponse) {
-        super.renderHead(pResponse);
-        final CssResourceReference css = new CssResourceReference(getClass(), getClass().getSimpleName() + ".css"); //$NON-NLS-1$
-        pResponse.render(CssHeaderItem.forReference(css));
     }
 
     private ListView<BeanProperty> getProperties() {
