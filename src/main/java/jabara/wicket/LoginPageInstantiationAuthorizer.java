@@ -3,6 +3,7 @@
  */
 package jabara.wicket;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
@@ -33,6 +34,7 @@ public abstract class LoginPageInstantiationAuthorizer implements IAuthorization
     /**
      * @see org.apache.wicket.authorization.IAuthorizationStrategy#isInstantiationAuthorized(java.lang.Class)
      */
+    @SuppressWarnings("unchecked")
     @Override
     public <T extends IRequestableComponent> boolean isInstantiationAuthorized(final Class<T> pComponentClass) {
         // Pageに載っているUI部品は常に表示OKにする.
@@ -54,9 +56,12 @@ public abstract class LoginPageInstantiationAuthorizer implements IAuthorization
             return true;
         }
 
-        // 認証済みの場合は表示する.
         if (isAuthenticated()) {
-            return true;
+            // 認証済みの場合はアプリケーション独自の認証を通す.
+            if (isPermittedPage((Class<? extends WebPage>) pComponentClass)) {
+                return true;
+            }
+            throw new RestartResponseAtInterceptPageException(Application.get().getApplicationSettings().getAccessDeniedPage());
         }
 
         // ログインページにリダイレクトする.
@@ -89,5 +94,11 @@ public abstract class LoginPageInstantiationAuthorizer implements IAuthorization
      * @return 現在のセッションが認証済みかどうかを返して下さい.
      */
     protected abstract boolean isAuthenticated();
+
+    /**
+     * @param pPageType
+     * @return ログイン済みだが表示が許可されないペーの場合はfalseを返して下さい.
+     */
+    protected abstract boolean isPermittedPage(Class<? extends WebPage> pPageType);
 
 }
