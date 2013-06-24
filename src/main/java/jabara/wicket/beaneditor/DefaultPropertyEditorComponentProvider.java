@@ -8,9 +8,11 @@ import jabara.wicket.ValidatorUtil;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -29,7 +31,11 @@ public class DefaultPropertyEditorComponentProvider implements IPropertyEditorCo
         }
 
         if (pProperty.getType().equals(Boolean.TYPE)) {
-            return new BooleanEditor(pId, new PropertyModel<Boolean>(pBean, pProperty.getName()));
+            return new BooleanEditor(pId, pProperty, new PropertyModel<Boolean>(pBean, pProperty.getName()));
+        }
+
+        if (pProperty.isMultiLine()) {
+            return new TextAreaInPanel(pId, pProperty, new PropertyModel<String>(pBean, pProperty.getName()));
         }
 
         return new TextFieldInPanel(pId, pProperty, new PropertyModel(pBean, pProperty.getName()));
@@ -41,11 +47,7 @@ public class DefaultPropertyEditorComponentProvider implements IPropertyEditorCo
     public static class LabelInPanel extends Panel {
         private static final long serialVersionUID = -6482487723458468208L;
 
-        /**
-         * @param pId -
-         * @param pModel -
-         */
-        public LabelInPanel(final String pId, final IModel<?> pModel) {
+        LabelInPanel(final String pId, final IModel<?> pModel) {
             super(pId, pModel);
             this.add(new Label("text", pModel)); //$NON-NLS-1$
         }
@@ -58,21 +60,13 @@ public class DefaultPropertyEditorComponentProvider implements IPropertyEditorCo
     public static class TextFieldInPanel extends Panel {
         private static final long serialVersionUID = 8973259496268254876L;
 
-        /**
-         * @param pId -
-         * @param pProperty -
-         * @param pModel -
-         */
         @SuppressWarnings({ "unchecked", "rawtypes" })
-        public TextFieldInPanel( //
-                final String pId //
-                , final BeanProperty pProperty //
-                , final IModel<?> pModel //
-        ) {
+        TextFieldInPanel(final String pId, final BeanProperty pProperty, final IModel<?> pModel) {
             super(pId);
 
             final Class<?> propertyType = pProperty.getType();
             final TextField text = new TextField("text", pModel, propertyType); //$NON-NLS-1$
+            text.setLabel(Model.of(pProperty.getLocalizedName()));
 
             if (propertyType.equals(String.class)) {
                 ValidatorUtil.setSimpleStringValidator(text, pProperty.getBeanType(), pProperty.getName());
@@ -80,6 +74,20 @@ public class DefaultPropertyEditorComponentProvider implements IPropertyEditorCo
             } else if (propertyType.isPrimitive()) {
                 text.setRequired(true);
             }
+
+            this.add(text);
+        }
+    }
+
+    private static class TextAreaInPanel extends Panel {
+        private static final long serialVersionUID = 517013022794807327L;
+
+        TextAreaInPanel(final String pId, final BeanProperty pProperty, final IModel<String> pModel) {
+            super(pId, pModel);
+
+            final TextArea<String> text = new TextArea<String>("text", pModel); //$NON-NLS-1$
+            text.setLabel(Model.of(pProperty.getLocalizedName()));
+            ValidatorUtil.setSimpleStringValidator(text, pProperty.getBeanType(), pProperty.getName());
 
             this.add(text);
         }
