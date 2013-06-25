@@ -96,7 +96,7 @@ public abstract class LoginPageInstantiationAuthorizer implements IAuthorization
     protected abstract boolean isAuthenticated();
 
     /**
-     * @param pPageType
+     * @param pPageType 表示リクエストのあったページ.
      * @return ログイン済みだが表示が許可されないペーの場合はfalseを返して下さい.
      */
     protected abstract boolean isPermittedPage(Class<? extends WebPage> pPageType);
