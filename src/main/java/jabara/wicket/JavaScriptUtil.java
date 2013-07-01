@@ -94,6 +94,6 @@ public final class JavaScriptUtil {
             _logger.warn(pTag.getId() + "(型：" + pTag.getClass().getName() + ") のoutputMarkupIdプロパティがfalseであるため、" //$NON-NLS-1$ //$NON-NLS-2$
                     + JavaScriptUtil.class.getSimpleName() + "#getFocusScript()は正常に動作しません."); //$NON-NLS-1$
         }
-        return "App.focus('" + pTag.getMarkupId() + "');"; //$NON-NLS-1$ //$NON-NLS-2$
+        return "(function() { var d = document.getElementById('" + pTag.getMarkupId() + "');alert(d);if (d!=null&&d.focus) d.focus(); })()"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 }

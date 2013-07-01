@@ -5,10 +5,14 @@ package jabara.wicket.beaneditor;
 
 import jabara.bean.BeanProperty;
 import jabara.general.ArgUtil;
+import jabara.general.NotFound;
 
 import java.util.ServiceLoader;
 
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 
 /**
  * @author jabaraster
@@ -30,6 +34,19 @@ public class PropertyEditor extends Panel {
         ArgUtil.checkNull(pProperty, "pPropertyValue"); //$NON-NLS-1$
 
         this.add(_provider.create("value", pBean, pProperty)); //$NON-NLS-1$
+    }
+
+    /**
+     * @return 最初に見付かった{@link FormComponent}オブジェクト. <br>
+     *         TODO 見付からなかったときは{@link NotFound}をスローしたい.
+     */
+    public FormComponent<?> getFirstFormComponent() {
+        return this.visitChildren(FormComponent.class, new IVisitor<FormComponent<?>, FormComponent<?>>() {
+            @Override
+            public void component(final FormComponent<?> pFormComponent, final IVisit<FormComponent<?>> pVisit) {
+                pVisit.stop(pFormComponent);
+            }
+        });
     }
 
     static IPropertyEditorComponentProvider getProvider() {
