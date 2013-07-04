@@ -4,6 +4,8 @@
 package jabara.wicket.beaneditor;
 
 import jabara.bean.BeanProperty;
+import jabara.general.NotFound;
+import jabara.general.ReflectionUtil;
 import jabara.wicket.ValidatorUtil;
 
 import org.apache.wicket.Component;
@@ -23,19 +25,36 @@ public class DefaultPropertyEditorComponentProvider implements IPropertyEditorCo
     /**
      * @see jabara.wicket.beaneditor.IPropertyEditorComponentProvider#create(java.lang.String, java.lang.Object, jabara.bean.BeanProperty)
      */
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes" })
     @Override
     public Component create(final String pId, final Object pBean, final BeanProperty pProperty) {
+        try {
+            final EditorFactory factoryAnno = pProperty.getAnnocation(EditorFactory.class);
+            final IEditorFactory factory = ReflectionUtil.newInstance(factoryAnno.value());
+            return factory.create(pId, pBean, pProperty);
+        } catch (final NotFound e) {
+            // 無視して次の処理へ.
+        }
+
         if (pProperty.isReadOnly()) {
             return new LabelInPanel(pId, new PropertyModel(pBean, pProperty.getName()));
         }
-
-        if (pProperty.getType().equals(Boolean.TYPE)) {
-            return new BooleanEditor(pId, pProperty, new PropertyModel<Boolean>(pBean, pProperty.getName()));
-        }
-
         if (pProperty.isMultiLine()) {
             return new TextAreaInPanel(pId, pProperty, new PropertyModel<String>(pBean, pProperty.getName()));
+        }
+
+        final Class<?> type = pProperty.getType();
+        if (type.equals(boolean.class)) {
+            return new PrimitiveBooleanEditor(pId, pProperty, new PropertyModel<Boolean>(pBean, pProperty.getName()));
+        }
+        if (type.equals(Boolean.class)) {
+            if (pProperty.isNullable()) {
+                return new BooleanEditor(pId, pProperty, new PropertyModel<Boolean>(pBean, pProperty.getName()));
+            }
+            return new PrimitiveBooleanEditor(pId, pProperty, new PropertyModel<Boolean>(pBean, pProperty.getName()));
+        }
+        if (Enum.class.isAssignableFrom(type)) {
+            return new EnumEditor(pId, pProperty, new PropertyModel<Enum<?>>(pBean, pProperty.getName()));
         }
 
         return new TextFieldInPanel(pId, pProperty, new PropertyModel(pBean, pProperty.getName()));

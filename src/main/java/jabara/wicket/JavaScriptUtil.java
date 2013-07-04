@@ -21,15 +21,14 @@ import org.slf4j.LoggerFactory;
  * @author jabaraster
  */
 public final class JavaScriptUtil {
-    private static final Logger                          _logger                = LoggerFactory.getLogger(JavaScriptUtil.class);
+    private static final Logger                     _logger                = LoggerFactory.getLogger(JavaScriptUtil.class);
 
     /**
      * 
      */
-    public static final JavaScriptResourceReference      JQUERY_1_9_1_REFERENCE = new JavaScriptResourceReference(JavaScriptUtil.class,
-                                                                                        "jquery-1.9.1.js");                             //$NON-NLS-1$
+    public static final JavaScriptResourceReference JQUERY_1_9_1_REFERENCE = new JavaScriptResourceReference(JavaScriptUtil.class, "jquery-1.9.1.js"); //$NON-NLS-1$
 
-    private static final Set<Class<? extends Component>> _added                 = new CopyOnWriteArraySet<Class<? extends Component>>();
+    private static final Set<String>                _added                 = new CopyOnWriteArraySet<String>();
 
     private JavaScriptUtil() {
         // 処理なし
@@ -50,8 +49,9 @@ public final class JavaScriptUtil {
         final JavaScriptResourceReference ref = new JavaScriptResourceReference(pResourceBase, jsFileName);
         pResponse.render(JavaScriptHeaderItem.forReference(ref));
 
-        if (!_added.contains(pResourceBase)) {
-            _added.add(pResourceBase); // このコードだと同じ型のpResourceBaseに対してaddが複数回動く可能性が残るのだが、多少遅くなることはあっても実害はない.
+        final String className = pResourceBase.getSimpleName();
+        if (!_added.contains(className)) {
+            _added.add(className); // このコードだと同じ型のpResourceBaseに対してaddが複数回動く可能性が残るのだが、多少遅くなることはあっても実害はない.
             WebApplication.get().mountResource(jsFileName, ref);
         }
     }
@@ -79,7 +79,12 @@ public final class JavaScriptUtil {
     public static void addJQuery1_9_1Reference(final IHeaderResponse pResponse) {
         ArgUtil.checkNull(pResponse, "pResponse"); //$NON-NLS-1$
         pResponse.render(JavaScriptHeaderItem.forReference(JQUERY_1_9_1_REFERENCE));
-        WebApplication.get().mountResource("jquery-1_9_1", JQUERY_1_9_1_REFERENCE); //$NON-NLS-1$
+
+        final String resourceName = "jquery-1_9_1"; //$NON-NLS-1$
+        if (!_added.contains(resourceName)) {
+            _added.add(resourceName);
+            WebApplication.get().mountResource(resourceName, JQUERY_1_9_1_REFERENCE);
+        }
     }
 
     /**
@@ -94,6 +99,6 @@ public final class JavaScriptUtil {
             _logger.warn(pTag.getId() + "(型：" + pTag.getClass().getName() + ") のoutputMarkupIdプロパティがfalseであるため、" //$NON-NLS-1$ //$NON-NLS-2$
                     + JavaScriptUtil.class.getSimpleName() + "#getFocusScript()は正常に動作しません."); //$NON-NLS-1$
         }
-        return "(function() { var d = document.getElementById('" + pTag.getMarkupId() + "');alert(d);if (d!=null&&d.focus) d.focus(); })()"; //$NON-NLS-1$ //$NON-NLS-2$
+        return "(function() {var d=document.getElementById('" + pTag.getMarkupId() + "');if(d!=null&&d.focus)d.focus();})()"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 }
