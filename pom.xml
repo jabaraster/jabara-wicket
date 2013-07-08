@@ -18,8 +18,8 @@
     <dependencies>
         <dependency>
             <groupId>jabaraster</groupId>
-            <artifactId>jabara-general</artifactId>
-            <version>1.2</version>
+            <artifactId>jabara-bean</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.wicket</groupId>
