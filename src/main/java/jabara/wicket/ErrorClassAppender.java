@@ -12,6 +12,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -21,9 +22,30 @@ import org.apache.wicket.util.visit.IVisitor;
  * @author jabaraster
  */
 public final class ErrorClassAppender implements Serializable {
-    private static final long   serialVersionUID = 6998584909786818613L;
+    private static final long           serialVersionUID          = 6998584909786818613L;
 
-    private final InnerAppender classAppender;
+    /**
+     * 
+     */
+    public static final String          DEFAULT_ERROR_CLASS       = "error";             //$NON-NLS-1$
+
+    private static final IModel<String> DEFAULT_ERROR_CLASS_MODEL = new AbstractReadOnlyModel<String>() {
+                                                                      private static final long serialVersionUID = -337932056100710284L;
+
+                                                                      @Override
+                                                                      public String getObject() {
+                                                                          return DEFAULT_ERROR_CLASS;
+                                                                      }
+                                                                  };
+
+    private final InnerAppender         classAppender;
+
+    /**
+     * 
+     */
+    public ErrorClassAppender() {
+        this(DEFAULT_ERROR_CLASS_MODEL);
+    }
 
     /**
      * @param pErrorClassModel エラー時にclass属性に追加する値.
