@@ -18,8 +18,8 @@
     <dependencies>
         <dependency>
             <groupId>jabaraster</groupId>
-            <artifactId>jabara-general</artifactId>
-            <version>1.2</version>
+            <artifactId>jabara-bean</artifactId>
+            <version>1.0-SNAPSHOT2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -43,6 +43,12 @@
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
             <version>1.0.1.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.orbit</groupId>
+            <artifactId>javax.servlet</artifactId>
+            <version>3.0.0.v201112011016</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

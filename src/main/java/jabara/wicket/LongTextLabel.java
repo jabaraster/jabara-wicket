@@ -11,10 +11,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.string.Strings;
 
 /**
  * @author jabaraster
@@ -80,7 +83,8 @@ public class LongTextLabel extends Panel {
     }
 
     private TextContext getContext() {
-        return TextContext.get(getDefaultModelObjectAsString(), this.preTextCharCount);
+        final String s = getModelString(getDefaultModel());
+        return TextContext.get(s, this.preTextCharCount);
     }
 
     @SuppressWarnings("serial")
@@ -104,7 +108,7 @@ public class LongTextLabel extends Panel {
     @SuppressWarnings({ "serial", "nls" })
     private Label getPost() {
         if (this.post == null) {
-            this.post = new Label("post", new AbstractReadOnlyModel<String>() {
+            this.post = new BrLabel("post", new AbstractReadOnlyModel<String>() {
                 @Override
                 public String getObject() {
                     final TextContext tc = getContext();
@@ -119,7 +123,7 @@ public class LongTextLabel extends Panel {
     @SuppressWarnings({ "nls", "serial" })
     private Label getPre() {
         if (this.pre == null) {
-            this.pre = new Label("pre", new AbstractReadOnlyModel<String>() {
+            this.pre = new BrLabel("pre", new AbstractReadOnlyModel<String>() {
                 @Override
                 public String getObject() {
                     return getContext().getPre();
@@ -127,6 +131,26 @@ public class LongTextLabel extends Panel {
             });
         }
         return this.pre;
+    }
+
+    private static String getModelString(final IModel<?> pModel) {
+        final Object o = pModel.getObject();
+        return o == null ? Empty.STRING : o.toString();
+    }
+
+    private static class BrLabel extends Label {
+        private static final long serialVersionUID = 8841904249230821972L;
+
+        BrLabel(final String pId, final IModel<?> pModel) {
+            super(pId, pModel);
+        }
+
+        @Override
+        public void onComponentTagBody(final MarkupStream pMarkupStream, final ComponentTag pOpenTag) {
+            final String s = Strings.escapeMarkup(getModelString(getDefaultModel())).toString();
+            final String body = s.replaceAll("\r\n", "<br/>"); //$NON-NLS-1$ //$NON-NLS-2$
+            replaceComponentTagBody(pMarkupStream, pOpenTag, body);
+        }
     }
 
     private class Handler implements Serializable {
