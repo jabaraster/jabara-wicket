@@ -18,6 +18,11 @@
     <dependencies>
         <dependency>
             <groupId>jabaraster</groupId>
+            <artifactId>jabara-general</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>jabaraster</groupId>
             <artifactId>jabara-bean</artifactId>
             <version>1.0-SNAPSHOT2</version>
         </dependency>
