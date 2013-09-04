@@ -11,15 +11,17 @@
 <wicket:panel>
 
     <li wicket:id="properties" class="input">
-      <span wicket:id="label" class="label">ユーザID</span>
-      <span wicket:id="property" class="value"><input type="text" /></span>
-      <div wicket:id="feedback">
-        <ul class="feedbackPanel">
-          <li class="feedbackPanelERROR">
-            <span class="feedbackPanelERROR">textは必須入力です。</span>
-          </li>
-        </ul>
-      </div>
+      <wicket:enclosure child="property">
+        <span wicket:id="label" class="label">ユーザID</span>
+        <span wicket:id="property" class="value"><input type="text" /></span>
+        <div wicket:id="feedback">
+          <ul class="feedbackPanel">
+            <li class="feedbackPanelERROR">
+              <span class="feedbackPanelERROR">textは必須入力です。</span>
+            </li>
+          </ul>
+        </div>
+      </wicket:enclosure>
     </li>
     <wicket:remove>
       <li class="input">
