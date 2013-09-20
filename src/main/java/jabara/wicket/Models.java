@@ -28,6 +28,7 @@ public final class Models {
 
     /**
      * @param pCollection -
+     * @param <C> -
      * @return -
      * @see Model#of(Collection)
      */
@@ -37,6 +38,7 @@ public final class Models {
 
     /**
      * @param pValue -
+     * @param <T> -
      * @return -
      * @see Model#of(Serializable)
      */
@@ -46,6 +48,7 @@ public final class Models {
 
     /**
      * @param pList -
+     * @param <C> -
      * @return -
      * @see Model#ofList(List)
      */
@@ -55,6 +58,8 @@ public final class Models {
 
     /**
      * @param pMap -
+     * @param <K> -
+     * @param <V> -
      * @return -
      * @see Model#ofMap(Map)
      */
@@ -64,6 +69,7 @@ public final class Models {
 
     /**
      * @param pSet -
+     * @param <C> -
      * @return -
      * @see Model#ofSet(Set)
      */
@@ -73,6 +79,7 @@ public final class Models {
 
     /**
      * @param pValue -
+     * @param <T> -
      * @return -
      */
     public static <T> IModel<T> readOnly(final T pValue) {

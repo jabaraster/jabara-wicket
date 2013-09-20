@@ -10,10 +10,10 @@
 
 <wicket:panel>
 
-    <li wicket:id="properties" class="input">
+    <li wicket:id="properties"　wicket:enclosure="property" class="input">
       <span wicket:id="label" class="label">ユーザID</span>
       <span wicket:id="property" class="value"><input type="text" /></span>
-      <div wicket:id="feedback">
+      <div wicket:id="feedback" class="feedback">
         <ul class="feedbackPanel">
           <li class="feedbackPanelERROR">
             <span class="feedbackPanelERROR">textは必須入力です。</span>
