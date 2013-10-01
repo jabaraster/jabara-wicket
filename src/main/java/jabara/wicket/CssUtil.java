@@ -52,9 +52,6 @@ public class CssUtil {
      */
     public static CssHeaderItem forComponentCssHeaderItem(final Class<? extends Component> pComponentType) {
         ArgUtil.checkNull(pComponentType, "pComponentType"); //$NON-NLS-1$
-
-        final String cssFileName = pComponentType.getSimpleName() + ".css"; //$NON-NLS-1$
-        final CssResourceReference ref = new CssResourceReference(pComponentType, cssFileName);
-        return CssHeaderItem.forReference(ref);
+        return ComponentCssHeaderItem.forType(pComponentType);
     }
 }

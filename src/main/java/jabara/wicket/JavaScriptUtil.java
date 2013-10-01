@@ -6,9 +6,6 @@ package jabara.wicket;
 import jabara.general.ArgUtil;
 import jabara.general.NameValue;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -19,7 +16,6 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.interpolator.MapVariableInterpolator;
-import org.apache.wicket.util.template.PackageTextTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,9 +95,7 @@ public final class JavaScriptUtil {
      */
     public static JavaScriptHeaderItem forComponentJavaScriptHeaderItem(final Class<? extends Component> pComponentType) {
         ArgUtil.checkNull(pComponentType, "pComponentType"); //$NON-NLS-1$
-        final String jsFileName = pComponentType.getSimpleName() + ".js"; //$NON-NLS-1$
-        final JavaScriptResourceReference ref = new JavaScriptResourceReference(pComponentType, jsFileName);
-        return JavaScriptHeaderItem.forReference(ref);
+        return new ComponentJavaScriptHeaderItem(pComponentType);
     }
 
     /**
@@ -143,29 +137,9 @@ public final class JavaScriptUtil {
             final Class<?> pScriptLocataionBase //
             , final String pScriptPath //
             , final NameValue<?>... pVariables) {
-
         ArgUtil.checkNull(pScriptLocataionBase, "pScriptLocataionBase"); //$NON-NLS-1$
         ArgUtil.checkNullOrEmpty(pScriptPath, "pScriptPath"); //$NON-NLS-1$
-
-        final PackageTextTemplate text = new PackageTextTemplate(pScriptLocataionBase, pScriptPath);
-        try {
-            final Map<String, Object> variables = new HashMap<String, Object>();
-            if (pVariables != null) {
-                for (final NameValue<?> nv : pVariables) {
-                    if (nv != null) {
-                        variables.put(nv.getName(), nv.getValue());
-                    }
-                }
-            }
-            return JavaScriptHeaderItem.forScript(text.asString(variables), null);
-
-        } finally {
-            try {
-                text.close();
-            } catch (final IOException e) {
-                // ignore.
-            }
-        }
+        return VariablesJavaScriptHeaderItem.forVariables(pScriptLocataionBase, pScriptPath, pVariables);
     }
 
     /**
