@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+</head>
+<body>
+
+<wicket:panel>
+  <div class="FileUploadPanel">
+    <div wicket:id="container">
+      <div class="fileArea">
+        <div class=" fileOverlay btn btn-success">
+          <i class="glyphicon glyphicon-white glyphicon-file"></i>
+          ファイルを選択
+          <input wicket:id="file" type="file" />
+        </div>
+        <span class="fileValue"></span>
+      </div>
+      <div class="progressBarArea">
+        <div class="progress progress-striped active">
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+      <div class="hiddenUploaderArea" style="display: none;"><button wicket:id="hiddenUploader" class="hiddenUploader">アップロード</button></div>
+      <div class="deleterArea"><button wicket:id="deleter" class="deleter">削除</button></div>
+      <div class="restorerArea"><button wicket:id="restorer" class="restorer">元に戻す</button></div>
+    </div>
+  </div> <!-- class="FileUploadPanel" -->
+</wicket:panel>
+
+</body>
+</html>
