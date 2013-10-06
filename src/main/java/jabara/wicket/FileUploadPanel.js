@@ -79,17 +79,16 @@ function initializeFileUploadPanel(pContainerId, pSubmitUrl, pHiddenUploaderId, 
             },
             dummy: null
 		}).done(function(pData) {
-           Wicket.Ajax.process(pData);
-           pJQueryFileField.val('');
-           root.find('.fileValue').text('');
-           progressBar.text('アップロード完了！');
-           progressBar.css('width', '100%');
-           setTimeout(function() {
-               progressBarContainer.hide('slow', function() {
-                   progressBar.text('');
-                   progressBar.css('width', '0');
-               });
-           }, 1000);
+            Wicket.Ajax.process(pData);
+            pJQueryFileField.val('');
+            progressBar.text('アップロード完了！');
+            progressBar.css('width', '100%');
+            setTimeout(function() {
+                progressBarContainer.hide('slow', function() {
+                    progressBar.text('');
+                    progressBar.css('width', '0');
+                });
+            }, 1000);
 		});
 	}
 }

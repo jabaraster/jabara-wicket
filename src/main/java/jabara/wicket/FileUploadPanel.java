@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,10 +31,12 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.string.interpolator.MapVariableInterpolator;
 
@@ -56,6 +59,7 @@ public class FileUploadPanel extends Panel {
 
     private WebMarkupContainer container;
     private FileUploadField    file;
+    private Label              fileValue;
     private AjaxButton         hiddenUploader;
     private AjaxButton         deleter;
     private AjaxButton         restorer;
@@ -139,6 +143,7 @@ public class FileUploadPanel extends Panel {
             this.container = new WebMarkupContainer("container"); //$NON-NLS-1$
             this.container.setOutputMarkupId(true);
             this.container.add(getFile());
+            this.container.add(getFileValue());
             this.container.add(getHiddenUploader());
             this.container.add(getDeleter());
             this.container.add(getRestorer());
@@ -167,6 +172,24 @@ public class FileUploadPanel extends Panel {
             this.file.setOutputMarkupId(true);
         }
         return this.file;
+    }
+
+    @SuppressWarnings("nls")
+    private Label getFileValue() {
+        if (this.fileValue == null) {
+            this.fileValue = new Label("fileValue", new AbstractReadOnlyModel<String>() {
+                private static final long serialVersionUID = -471390311954435759L;
+
+                @Override
+                public String getObject() {
+                    if (FileUploadPanel.this.operation == Operation.UPDATE) {
+                        return buildDataInformation(getString("uploaded"), FileUploadPanel.this.uploadData);
+                    }
+                    return getString("noUploadFile"); //$NON-NLS-1$
+                }
+            });
+        }
+        return this.fileValue;
     }
 
     private AjaxButton getHiddenUploader() {
@@ -223,6 +246,11 @@ public class FileUploadPanel extends Panel {
             IOUtils.closeQuietly(bufOut);
             IOUtils.closeQuietly(out);
         }
+    }
+
+    @SuppressWarnings("boxing")
+    private static String buildDataInformation(final String pPrefix, final Data pData) {
+        return pPrefix + MessageFormat.format("{0}({1} {2,number,#,##0}KB)", pData.getName(), pData.getContentType(), pData.getSize() / 1024); //$NON-NLS-1$
     }
 
     /**
@@ -431,6 +459,7 @@ public class FileUploadPanel extends Panel {
             if (FileUploadPanel.this.uploadData != null) {
                 FileUploadPanel.this.uploadData.close();
             }
+            pTarget.add(getFileValue());
             FileUploadPanel.this.onDelete.call(pTarget);
         }
 
@@ -439,6 +468,7 @@ public class FileUploadPanel extends Panel {
             if (FileUploadPanel.this.uploadData != null) {
                 FileUploadPanel.this.uploadData.close();
             }
+            pTarget.add(getFileValue());
             FileUploadPanel.this.onReset.call(pTarget);
         }
 
@@ -448,6 +478,7 @@ public class FileUploadPanel extends Panel {
                 FileUploadPanel.this.uploadData = saveToTemporaryFile(upload);
                 FileUploadPanel.this.operation = Operation.UPDATE;
             }
+            pTarget.add(getFileValue());
             FileUploadPanel.this.onUpload.call(pTarget);
         }
     }

@@ -14,7 +14,7 @@
           ファイルを選択
           <input wicket:id="file" type="file" />
         </div>
-        <span class="fileValue"></span>
+        <span wicket:id="fileValue" class="fileValue"></span>
       </div>
       <div class="progressBarArea">
         <div class="progress progress-striped active">
@@ -22,8 +22,18 @@
         </div>
       </div>
       <div class="hiddenUploaderArea" style="display: none;"><button wicket:id="hiddenUploader" class="hiddenUploader">アップロード</button></div>
-      <div class="deleterArea"><button wicket:id="deleter" class="deleter">削除</button></div>
-      <div class="restorerArea"><button wicket:id="restorer" class="restorer">元に戻す</button></div>
+      <div class="deleterArea">
+        <button wicket:id="deleter" class="deleter btn btn-primary">
+          <i class="glyphicon glyphicon-white glyphicon-remove"></i>
+          削除
+        </button>
+      </div>
+      <div class="restorerArea">
+        <button wicket:id="restorer" class="deleter btn btn-primary">
+          <i class="glyphicon glyphicon-white glyphicon-backward"></i>
+          元に戻す
+        </button>
+      </div>
     </div>
   </div> <!-- class="FileUploadPanel" -->
 </wicket:panel>
