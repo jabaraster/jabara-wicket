@@ -7,16 +7,15 @@ import jabara.general.ArgUtil;
 import jabara.general.Empty;
 import jabara.general.ExceptionUtil;
 import jabara.general.IProducer;
+import jabara.general.io.DataOperation;
+import jabara.general.io.DataOperation.Operation;
+import jabara.general.io.FileReadableData;
+import jabara.general.io.IReadableData;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.Closeable;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -43,13 +42,14 @@ import org.apache.wicket.util.string.interpolator.MapVariableInterpolator;
 /**
  * @author jabaraster
  */
+@SuppressWarnings("synthetic-access")
 public class FileUploadPanel extends Panel {
     private static final long  serialVersionUID     = -220850110042516428L;
 
     private IProducer<File>    temporaryFileCreator = DefaultTemporaryFileCreator.GLOBAL;
 
     private Operation          operation            = Operation.NOOP;
-    private Data               uploadData;
+    private FileReadableData   uploadData;
 
     private IAjaxCallback      onUpload             = NullAjaxCallback.GLOBAL;
     private IAjaxCallback      onReset              = NullAjaxCallback.GLOBAL;
@@ -138,7 +138,10 @@ public class FileUploadPanel extends Panel {
         return this;
     }
 
-    private WebMarkupContainer getContainer() {
+    /**
+     * @return -
+     */
+    protected WebMarkupContainer getContainer() {
         if (this.container == null) {
             this.container = new WebMarkupContainer("container"); //$NON-NLS-1$
             this.container.setOutputMarkupId(true);
@@ -152,7 +155,10 @@ public class FileUploadPanel extends Panel {
         return this.container;
     }
 
-    private AjaxButton getDeleter() {
+    /**
+     * @return -
+     */
+    protected AjaxButton getDeleter() {
         if (this.deleter == null) {
             this.deleter = new IndicatingAjaxButton("deleter") { //$NON-NLS-1$
                 private static final long serialVersionUID = 9021528280576073380L;
@@ -166,7 +172,10 @@ public class FileUploadPanel extends Panel {
         return this.deleter;
     }
 
-    private FileUploadField getFile() {
+    /**
+     * @return -
+     */
+    protected FileUploadField getFile() {
         if (this.file == null) {
             this.file = new FileUploadField("file"); //$NON-NLS-1$
             this.file.setOutputMarkupId(true);
@@ -174,8 +183,11 @@ public class FileUploadPanel extends Panel {
         return this.file;
     }
 
+    /**
+     * @return -
+     */
     @SuppressWarnings("nls")
-    private Label getFileValue() {
+    protected Label getFileValue() {
         if (this.fileValue == null) {
             this.fileValue = new Label("fileValue", new AbstractReadOnlyModel<String>() {
                 private static final long serialVersionUID = -471390311954435759L;
@@ -192,7 +204,10 @@ public class FileUploadPanel extends Panel {
         return this.fileValue;
     }
 
-    private AjaxButton getHiddenUploader() {
+    /**
+     * @return -
+     */
+    protected AjaxButton getHiddenUploader() {
         if (this.hiddenUploader == null) {
             this.hiddenUploader = new AjaxButton("hiddenUploader") { //$NON-NLS-1$
                 private static final long serialVersionUID = 3637109892153262303L;
@@ -207,12 +222,10 @@ public class FileUploadPanel extends Panel {
         return this.hiddenUploader;
     }
 
-    private CharSequence getHiddenUploaderCallbackUrl() {
-        final List<AjaxFormSubmitBehavior> bs = getHiddenUploader().getBehaviors(AjaxFormSubmitBehavior.class);
-        return bs.isEmpty() ? Empty.STRING : bs.get(0).getCallbackUrl();
-    }
-
-    private AjaxButton getRestorer() {
+    /**
+     * @return -
+     */
+    protected AjaxButton getRestorer() {
         if (this.restorer == null) {
             this.restorer = new IndicatingAjaxButton("restorer") { //$NON-NLS-1$
                 private static final long serialVersionUID = 622729316081692586L;
@@ -226,8 +239,12 @@ public class FileUploadPanel extends Panel {
         return this.restorer;
     }
 
-    @SuppressWarnings("resource")
-    private Data saveToTemporaryFile(final FileUpload pUpload) {
+    private CharSequence getHiddenUploaderCallbackUrl() {
+        final List<AjaxFormSubmitBehavior> bs = getHiddenUploader().getBehaviors(AjaxFormSubmitBehavior.class);
+        return bs.isEmpty() ? Empty.STRING : bs.get(0).getCallbackUrl();
+    }
+
+    private FileReadableData saveToTemporaryFile(final FileUpload pUpload) {
         final File temp = this.temporaryFileCreator.produce();
         OutputStream out = null;
         BufferedOutputStream bufOut = null;
@@ -236,7 +253,7 @@ public class FileUploadPanel extends Panel {
             bufOut = new BufferedOutputStream(out);
             IOUtils.copy(pUpload.getInputStream(), bufOut);
 
-            return new Data(pUpload.getClientFileName(), pUpload.getContentType(), temp);
+            return new FileReadableData(pUpload.getClientFileName(), pUpload.getContentType(), temp);
 
         } catch (final IOException e) {
             throw ExceptionUtil.rethrow(e);
@@ -249,164 +266,8 @@ public class FileUploadPanel extends Panel {
     }
 
     @SuppressWarnings("boxing")
-    private static String buildDataInformation(final String pPrefix, final Data pData) {
+    private static String buildDataInformation(final String pPrefix, final IReadableData pData) {
         return pPrefix + MessageFormat.format("{0}({1} {2,number,#,##0}KB)", pData.getName(), pData.getContentType(), pData.getSize() / 1024); //$NON-NLS-1$
-    }
-
-    /**
-     * @author jabaraster -
-     */
-    public static class Data implements Serializable, Closeable {
-        private static final long serialVersionUID = 3840006366554216969L;
-
-        private final String      contentType;
-        private final String      name;
-
-        private File              saveFile;
-        private InputStream       in;
-
-        /**
-         * @param pContentType -
-         * @param pName -
-         * @param pSaveFile -
-         */
-        private Data(final String pName, final String pContentType, final File pSaveFile) {
-            ArgUtil.checkNullOrEmpty(pContentType, "pContentType"); //$NON-NLS-1$
-            ArgUtil.checkNull(pSaveFile, "pSaveFile"); //$NON-NLS-1$
-            this.name = pName == null ? Empty.STRING : pName;
-            this.contentType = pContentType;
-            this.saveFile = pSaveFile;
-        }
-
-        /**
-         * @see java.io.Closeable#close()
-         */
-        @Override
-        public void close() {
-            if (this.saveFile == null) {
-                return;
-            }
-            if (this.in != null) {
-                try {
-                    this.in.close();
-                } catch (final IOException e) {
-                    // 無視
-                }
-            }
-            this.saveFile.delete();
-            this.saveFile = null;
-        }
-
-        /**
-         * @return -
-         */
-        public String getContentType() {
-            return this.contentType;
-        }
-
-        /**
-         * @return -
-         */
-        public InputStream getInputStream() {
-            if (this.saveFile == null) {
-                throw new IllegalStateException("closeを呼び出した後に当メソッドを呼び出すことは出来ません."); //$NON-NLS-1$
-            }
-            if (this.in != null) {
-                return this.in;
-            }
-            try {
-                this.in = new BufferedInputStream(new FileInputStream(this.saveFile));
-                return this.in;
-            } catch (final FileNotFoundException e) {
-                throw ExceptionUtil.rethrow(e);
-            }
-        }
-
-        /**
-         * @return -
-         */
-        public String getName() {
-            return this.name;
-        }
-
-        /**
-         * @return -
-         */
-        public long getSize() {
-            return getSizeCore();
-        }
-
-        /**
-         * @see java.lang.Object#toString()
-         */
-        @SuppressWarnings("nls")
-        @Override
-        public String toString() {
-            return "Data [contentType=" + this.contentType + ", size=" + getSizeCore() + ", name=" + this.name + "]";
-        }
-
-        private long getSizeCore() {
-            return this.saveFile.length();
-        }
-    }
-
-    /**
-     * @author jabaraster -
-     */
-    public static class DataOperation implements Serializable, Closeable {
-        private static final long serialVersionUID = -3960649395769259898L;
-
-        private final Operation   operation;
-        private final Data        data;
-
-        /**
-         * @param pOperation -
-         * @param pData pOperationが{@link Operation#UPDATE}以外の場合、ここで指定されたオブジェクトは使われません.
-         */
-        public DataOperation(final Operation pOperation, final Data pData) {
-            ArgUtil.checkNull(pOperation, "pOperation"); //$NON-NLS-1$
-            if (this.operation == Operation.UPDATE && pData == null) {
-                throw new IllegalArgumentException("pOperationがUPDATEのとき、pDataはnullであってはいけません."); //$NON-NLS-1$
-            }
-
-            this.operation = pOperation;
-            this.data = this.operation == Operation.UPDATE ? pData : null;
-        }
-
-        /**
-         * @see java.io.Closeable#close()
-         */
-        @Override
-        public void close() {
-            this.data.close();
-        }
-
-        /**
-         * @return dataを返す.
-         * @throws IllegalStateException operationがUPDATE以外の場合.
-         */
-        public Data getData() {
-            if (this.data == null) {
-                throw new IllegalStateException("operationがUPDATEでなければこのメソッドは呼び出せません."); //$NON-NLS-1$
-            }
-            return this.data;
-        }
-
-        /**
-         * @return operationを返す.
-         */
-        public Operation getOperation() {
-            return this.operation;
-        }
-
-        /**
-         * @see java.lang.Object#toString()
-         */
-        @SuppressWarnings("nls")
-        @Override
-        public String toString() {
-            return "DataOperation [operation=" + this.operation + ", data=" + this.data + "]";
-        }
     }
 
     /**
@@ -433,41 +294,21 @@ public class FileUploadPanel extends Panel {
         }
     }
 
-    /**
-     * @author jabaraster
-     */
-    public enum Operation {
-        /**
-         * 
-         */
-        NOOP,
-        /**
-         * 
-         */
-        UPDATE,
-        /**
-         * 
-         */
-        DELETE, ;
-    }
-
     private class Handler implements Serializable {
         private static final long serialVersionUID = -5086355719055362617L;
 
         void onDelete(final AjaxRequestTarget pTarget) {
             FileUploadPanel.this.operation = Operation.DELETE;
-            if (FileUploadPanel.this.uploadData != null) {
-                FileUploadPanel.this.uploadData.close();
-            }
+            deleteUploadDataIfExists();
+
             pTarget.add(getFileValue());
             FileUploadPanel.this.onDelete.call(pTarget);
         }
 
         void onRestore(final AjaxRequestTarget pTarget) {
             FileUploadPanel.this.operation = Operation.NOOP;
-            if (FileUploadPanel.this.uploadData != null) {
-                FileUploadPanel.this.uploadData.close();
-            }
+            deleteUploadDataIfExists();
+
             pTarget.add(getFileValue());
             FileUploadPanel.this.onReset.call(pTarget);
         }
@@ -480,6 +321,12 @@ public class FileUploadPanel extends Panel {
             }
             pTarget.add(getFileValue());
             FileUploadPanel.this.onUpload.call(pTarget);
+        }
+
+        private void deleteUploadDataIfExists() {
+            if (FileUploadPanel.this.uploadData != null) {
+                FileUploadPanel.this.uploadData.deleteFile();
+            }
         }
     }
 }
