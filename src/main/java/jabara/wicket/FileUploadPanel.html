@@ -21,17 +21,19 @@
           <div class="progress-bar"></div>
         </div>
       </div>
-      <div class="hiddenUploaderArea" style="display: none;"><button wicket:id="hiddenUploader" class="hiddenUploader">アップロード</button></div>
+      <div class="hiddenUploaderArea" style="display: none;">
+          <button wicket:id="hiddenUploader" class="hiddenUploader">アップロード</button>
+      </div>
       <div class="deleterArea">
         <button wicket:id="deleter" class="deleter btn btn-primary">
           <i class="glyphicon glyphicon-white glyphicon-remove"></i>
-          削除
+          <span>削除</span>
         </button>
       </div>
       <div class="restorerArea">
         <button wicket:id="restorer" class="deleter btn btn-primary">
           <i class="glyphicon glyphicon-white glyphicon-backward"></i>
-          元に戻す
+          <span>元に戻す</span>
         </button>
       </div>
     </div>
