@@ -244,6 +244,7 @@ public class FileUploadPanel extends Panel {
         return bs.isEmpty() ? Empty.STRING : bs.get(0).getCallbackUrl();
     }
 
+    @SuppressWarnings("resource")
     private FileReadableData saveToTemporaryFile(final FileUpload pUpload) {
         final File temp = this.temporaryFileCreator.produce();
         OutputStream out = null;
@@ -316,6 +317,9 @@ public class FileUploadPanel extends Panel {
         void onUpload(final AjaxRequestTarget pTarget) {
             final FileUpload upload = getFile().getFileUpload();
             if (upload != null) {
+                if (FileUploadPanel.this.uploadData != null) {
+                    FileUploadPanel.this.uploadData.deleteFile();
+                }
                 FileUploadPanel.this.uploadData = saveToTemporaryFile(upload);
                 FileUploadPanel.this.operation = Operation.UPDATE;
             }
