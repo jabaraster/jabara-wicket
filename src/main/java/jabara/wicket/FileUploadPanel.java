@@ -80,6 +80,17 @@ public class FileUploadPanel extends Panel {
     }
 
     /**
+     * @return -
+     */
+    public FileUploadField getFile() {
+        if (this.file == null) {
+            this.file = new FileUploadField("file"); //$NON-NLS-1$
+            this.file.setOutputMarkupId(true);
+        }
+        return this.file;
+    }
+
+    /**
      * @see org.apache.wicket.Component#renderHead(org.apache.wicket.markup.head.IHeaderResponse)
      */
     @Override
@@ -175,17 +186,6 @@ public class FileUploadPanel extends Panel {
     /**
      * @return -
      */
-    protected FileUploadField getFile() {
-        if (this.file == null) {
-            this.file = new FileUploadField("file"); //$NON-NLS-1$
-            this.file.setOutputMarkupId(true);
-        }
-        return this.file;
-    }
-
-    /**
-     * @return -
-     */
     @SuppressWarnings("nls")
     protected Label getFileValue() {
         if (this.fileValue == null) {
@@ -213,7 +213,13 @@ public class FileUploadPanel extends Panel {
                 private static final long serialVersionUID = 3637109892153262303L;
 
                 @Override
-                protected void onSubmit(final AjaxRequestTarget pTarget, @SuppressWarnings("unused") final Form<?> pForm) {
+                protected void onError(final AjaxRequestTarget pTarget, final Form<?> pForm) {
+                    onUploadError(pTarget, pForm);
+                }
+
+                @Override
+                protected void onSubmit(final AjaxRequestTarget pTarget, final Form<?> pForm) {
+                    onUploadSubmit(pTarget, pForm);
                     FileUploadPanel.this.handler.onUpload(pTarget);
                 }
             };
@@ -237,6 +243,24 @@ public class FileUploadPanel extends Panel {
             };
         }
         return this.restorer;
+    }
+
+    /**
+     * @param pTarget -
+     * @param pForm -
+     */
+    @SuppressWarnings("unused")
+    protected void onUploadError(final AjaxRequestTarget pTarget, final Form<?> pForm) {
+        // デフォルト処理なし
+    }
+
+    /**
+     * @param pTarget -
+     * @param pForm -
+     */
+    @SuppressWarnings("unused")
+    protected void onUploadSubmit(final AjaxRequestTarget pTarget, final Form<?> pForm) {
+        // デフォルト処理なし
     }
 
     private CharSequence getHiddenUploaderCallbackUrl() {

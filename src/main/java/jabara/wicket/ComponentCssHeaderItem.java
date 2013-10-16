@@ -15,7 +15,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 public class ComponentCssHeaderItem extends CssReferenceHeaderItem {
 
     /**
-     * @param pComponentType
+     * @param pComponentType -
      */
     public ComponentCssHeaderItem(final Class<? extends Component> pComponentType) {
         super(new CssResourceReference(pComponentType, pComponentType.getSimpleName() + ".css"), null, null, null); //$NON-NLS-1$

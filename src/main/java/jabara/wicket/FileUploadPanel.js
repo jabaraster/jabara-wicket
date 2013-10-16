@@ -79,8 +79,6 @@ function initializeFileUploadPanel(pContainerId, pSubmitUrl, pHiddenUploaderId, 
             },
             dummy: null
         }).done(function(pData) {
-        	console.log(pData);
-        	
             Wicket.Ajax.process(pData);
             pJQueryFileField.val('');
             progressBar.text('アップロード完了！');
