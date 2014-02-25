@@ -16,6 +16,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -73,6 +74,18 @@ public class FileUploadPanel extends Panel {
     }
 
     /**
+     * 
+     */
+    public void destroyCurrentUploadFile() {
+        final FileUpload fileUpload = getFile().getFileUpload();
+        if (fileUpload == null) {
+            return;
+        }
+        fileUpload.closeStreams();
+        fileUpload.delete();
+    }
+
+    /**
      * @return -
      */
     public DataOperation getDataOperation() {
@@ -88,6 +101,18 @@ public class FileUploadPanel extends Panel {
             this.file.setOutputMarkupId(true);
         }
         return this.file;
+    }
+
+    /**
+     * @return -
+     * @throws IOException -
+     */
+    public InputStream getUploadDataByStream() throws IOException {
+        final FileUpload fileUpload = getFile().getFileUpload();
+        if (fileUpload == null) {
+            return null;
+        }
+        return fileUpload.getInputStream();
     }
 
     /**
