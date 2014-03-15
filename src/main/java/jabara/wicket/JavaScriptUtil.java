@@ -95,7 +95,7 @@ public final class JavaScriptUtil {
      */
     public static JavaScriptHeaderItem forComponentJavaScriptHeaderItem(final Class<? extends Component> pComponentType) {
         ArgUtil.checkNull(pComponentType, "pComponentType"); //$NON-NLS-1$
-        return new ComponentJavaScriptHeaderItem(pComponentType);
+        return new ComponentJavaScriptHeaderItem(pComponentType, false);
     }
 
     /**

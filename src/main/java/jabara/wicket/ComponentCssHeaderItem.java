@@ -18,15 +18,35 @@ public class ComponentCssHeaderItem extends CssReferenceHeaderItem {
      * @param pComponentType -
      */
     public ComponentCssHeaderItem(final Class<? extends Component> pComponentType) {
-        super(new CssResourceReference(pComponentType, pComponentType.getSimpleName() + ".css"), null, null, null); //$NON-NLS-1$
+        this(pComponentType, false);
     }
 
     /**
      * @param pComponentType -
-     * @return -
+     * @param pMinimized 圧縮されたCSSを使う場合はtrueを指定.
+     */
+    public ComponentCssHeaderItem(final Class<? extends Component> pComponentType, final boolean pMinimized) {
+        super(new CssResourceReference(pComponentType, pComponentType.getSimpleName() + (pMinimized ? ".min" : "") + ".css") // //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                , null //
+                , null //
+                , null);
+    }
+
+    /**
+     * @param pComponentType -
+     * @return コンポーネントクラスと同じ場所にある"コンポーネント名.css"を参照するヘッダアイテム.
      */
     public static ComponentCssHeaderItem forType(final Class<? extends Component> pComponentType) {
         ArgUtil.checkNull(pComponentType, "pComponentType"); //$NON-NLS-1$
-        return new ComponentCssHeaderItem(pComponentType);
+        return new ComponentCssHeaderItem(pComponentType, false);
+    }
+
+    /**
+     * @param pComponentType -
+     * @return コンポーネントクラスと同じ場所にある"コンポーネント名.min.css"を参照するヘッダアイテム.
+     */
+    public static ComponentCssHeaderItem minimizedForType(final Class<? extends Component> pComponentType) {
+        ArgUtil.checkNull(pComponentType, "pComponentType"); //$NON-NLS-1$
+        return new ComponentCssHeaderItem(pComponentType, true);
     }
 }
