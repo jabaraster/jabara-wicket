@@ -17,14 +17,14 @@ import org.apache.wicket.util.template.PackageTextTemplate;
 /**
  * @author jabaraster
  */
-public class VariablesCssHeaderItem extends CssContentHeaderItem {
+public class VariableCssHeaderItem extends CssContentHeaderItem {
 
     /**
      * @param pCssLocataionBase -
      * @param pCssPath -
      * @param pVariables -
      */
-    public VariablesCssHeaderItem( //
+    public VariableCssHeaderItem( //
             final Class<?> pCssLocataionBase //
             , final String pCssPath //
             , final NameValue<?>... pVariables) {
@@ -39,14 +39,14 @@ public class VariablesCssHeaderItem extends CssContentHeaderItem {
      * @param pVariables -
      * @return -
      */
-    public static VariablesCssHeaderItem forVariables( //
+    public static VariableCssHeaderItem forVariables( //
             final Class<?> pCssLocataionBase //
             , final String pCssPath //
             , final NameValue<?>... pVariables) {
 
         ArgUtil.checkNull(pCssLocataionBase, "pCssLocataionBase"); //$NON-NLS-1$
         ArgUtil.checkNullOrEmpty(pCssPath, "pCssPath"); //$NON-NLS-1$
-        return new VariablesCssHeaderItem(pCssLocataionBase, pCssPath, pVariables);
+        return new VariableCssHeaderItem(pCssLocataionBase, pCssPath, pVariables);
     }
 
     private static CharSequence bulidCss(final Class<?> pCssLocataionBase, final String pCssPath, final NameValue<?>[] pVariables) {

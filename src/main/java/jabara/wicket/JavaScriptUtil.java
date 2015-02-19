@@ -139,7 +139,7 @@ public final class JavaScriptUtil {
             , final NameValue<?>... pVariables) {
         ArgUtil.checkNull(pScriptLocataionBase, "pScriptLocataionBase"); //$NON-NLS-1$
         ArgUtil.checkNullOrEmpty(pScriptPath, "pScriptPath"); //$NON-NLS-1$
-        return VariablesJavaScriptHeaderItem.forVariables(pScriptLocataionBase, pScriptPath, pVariables);
+        return VariableJavaScriptHeaderItem.forVariables(pScriptLocataionBase, pScriptPath, pVariables);
     }
 
     /**

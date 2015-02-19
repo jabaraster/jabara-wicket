@@ -15,12 +15,11 @@ import org.apache.wicket.request.Response;
 /**
  * @author jabaraster
  */
-public class ObjectCreationHeaderItem extends HeaderItem {
-    private static final long serialVersionUID = -2989084388200520698L;
+public class ObjectCreationScriptHeaderItem extends HeaderItem {
 
-    private final Class<?>    type;
+    private final Class<?> type;
 
-    private ObjectCreationHeaderItem(final Class<?> pComponentType) {
+    private ObjectCreationScriptHeaderItem(final Class<?> pComponentType) {
         ArgUtil.checkNull(pComponentType, "pComponentType"); //$NON-NLS-1$
         this.type = pComponentType;
     }
@@ -55,17 +54,17 @@ public class ObjectCreationHeaderItem extends HeaderItem {
      * @param pBehaviorType -
      * @return -
      */
-    public static ObjectCreationHeaderItem forBehavior(final Class<? extends Behavior> pBehaviorType) {
+    public static ObjectCreationScriptHeaderItem forBehavior(final Class<? extends Behavior> pBehaviorType) {
         ArgUtil.checkNull(pBehaviorType, "pBehaviorType"); //$NON-NLS-1$
-        return new ObjectCreationHeaderItem(pBehaviorType);
+        return new ObjectCreationScriptHeaderItem(pBehaviorType);
     }
 
     /**
      * @param pComponentType -
      * @return -
      */
-    public static ObjectCreationHeaderItem forComponent(final Class<? extends Component> pComponentType) {
+    public static ObjectCreationScriptHeaderItem forComponent(final Class<? extends Component> pComponentType) {
         ArgUtil.checkNull(pComponentType, "pComponentType"); //$NON-NLS-1$
-        return new ObjectCreationHeaderItem(pComponentType);
+        return new ObjectCreationScriptHeaderItem(pComponentType);
     }
 }

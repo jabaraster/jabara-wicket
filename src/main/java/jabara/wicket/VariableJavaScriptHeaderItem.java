@@ -17,14 +17,14 @@ import org.apache.wicket.util.template.PackageTextTemplate;
 /**
  * @author jabaraster
  */
-public class VariablesJavaScriptHeaderItem extends JavaScriptContentHeaderItem {
+public class VariableJavaScriptHeaderItem extends JavaScriptContentHeaderItem {
 
     /**
      * @param pScriptLocataionBase -
      * @param pScriptPath -
      * @param pVariables -
      */
-    public VariablesJavaScriptHeaderItem( //
+    public VariableJavaScriptHeaderItem( //
             final Class<?> pScriptLocataionBase //
             , final String pScriptPath //
             , final NameValue<?>... pVariables) {
@@ -39,14 +39,14 @@ public class VariablesJavaScriptHeaderItem extends JavaScriptContentHeaderItem {
      * @param pVariables -
      * @return -
      */
-    public static VariablesJavaScriptHeaderItem forVariables( //
+    public static VariableJavaScriptHeaderItem forVariables( //
             final Class<?> pScriptLocataionBase //
             , final String pScriptPath //
             , final NameValue<?>... pVariables) {
 
         ArgUtil.checkNull(pScriptLocataionBase, "pScriptLocataionBase"); //$NON-NLS-1$
         ArgUtil.checkNullOrEmpty(pScriptPath, "pScriptPath"); //$NON-NLS-1$
-        return new VariablesJavaScriptHeaderItem(pScriptLocataionBase, pScriptPath, pVariables);
+        return new VariableJavaScriptHeaderItem(pScriptLocataionBase, pScriptPath, pVariables);
     }
 
     private static CharSequence bulidScript(final Class<?> pScriptLocataionBase, final String pScriptPath, final NameValue<?>[] pVariables) {
