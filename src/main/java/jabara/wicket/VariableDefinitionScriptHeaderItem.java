@@ -50,6 +50,8 @@ public class VariableDefinitionScriptHeaderItem extends HeaderItem {
                 script.append("null");
             } else if (value.getClass().isPrimitive()) {
                 script.append(value);
+            } else if (isWrapper(value.getClass())) {
+                script.append(value);
             } else if (Number.class.isAssignableFrom(value.getClass())) {
                 script.append(value);
             } else {
@@ -72,5 +74,18 @@ public class VariableDefinitionScriptHeaderItem extends HeaderItem {
         ArgUtil.checkNull(pPageType, "pPageType"); //$NON-NLS-1$
         ArgUtil.checkNull(pPlaceholders, "pPlaceholders"); //$NON-NLS-1$
         return new VariableDefinitionScriptHeaderItem(pPageType, pPlaceholders);
+    }
+
+    private static boolean isWrapper(final Class<? extends Object> pClass) {
+        if (Character.class.isAssignableFrom(pClass)) {
+            return true;
+        }
+        if (Number.class.isAssignableFrom(pClass)) {
+            return true;
+        }
+        if (Boolean.class.isAssignableFrom(pClass)) {
+            return true;
+        }
+        return false;
     }
 }
