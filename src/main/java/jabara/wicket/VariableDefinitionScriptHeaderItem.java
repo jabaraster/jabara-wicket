@@ -8,7 +8,7 @@ import jabara.general.NameValue;
 
 import java.util.Collections;
 
-import org.apache.wicket.Page;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.Response;
 
@@ -46,14 +46,16 @@ public class VariableDefinitionScriptHeaderItem extends HeaderItem {
         for (final NameValue<?> placeholder : this.placeholders) {
             script.append("    App.vars.").append(placeholder.getName()).append(" = ");
             final Object value = placeholder.getValue();
+
             if (value == null) {
                 script.append("null");
+
             } else if (value.getClass().isPrimitive()) {
                 script.append(value);
+
             } else if (isWrapper(value.getClass())) {
                 script.append(value);
-            } else if (Number.class.isAssignableFrom(value.getClass())) {
-                script.append(value);
+
             } else {
                 script.append("'").append(value).append("'");
             }
@@ -66,14 +68,15 @@ public class VariableDefinitionScriptHeaderItem extends HeaderItem {
     }
 
     /**
-     * @param pPageType -
+     * @param pComponentType -
      * @param pPlaceholders -
      * @return -
      */
-    public static VariableDefinitionScriptHeaderItem forPage(final Class<? extends Page> pPageType, final NameValue<?>... pPlaceholders) {
-        ArgUtil.checkNull(pPageType, "pPageType"); //$NON-NLS-1$
+    public static VariableDefinitionScriptHeaderItem forComponent(final Class<? extends Component> pComponentType,
+            final NameValue<?>... pPlaceholders) {
+        ArgUtil.checkNull(pComponentType, "pComponentType"); //$NON-NLS-1$
         ArgUtil.checkNull(pPlaceholders, "pPlaceholders"); //$NON-NLS-1$
-        return new VariableDefinitionScriptHeaderItem(pPageType, pPlaceholders);
+        return new VariableDefinitionScriptHeaderItem(pComponentType, pPlaceholders);
     }
 
     private static boolean isWrapper(final Class<? extends Object> pClass) {
