@@ -6,6 +6,7 @@ package jabara.wicket;
 import jabara.general.ArgUtil;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
 
@@ -39,6 +40,17 @@ public class ComponentCssHeaderItem extends CssReferenceHeaderItem {
     public static ComponentCssHeaderItem forType(final Class<? extends Component> pComponentType) {
         ArgUtil.checkNull(pComponentType, "pComponentType"); //$NON-NLS-1$
         return new ComponentCssHeaderItem(pComponentType, false);
+    }
+
+    /**
+     * @param pComponentType -
+     * @param pConfiguration -
+     * @return コンポーネントクラスと同じ場所にある"コンポーネント名.css"を参照するヘッダアイテム.
+     */
+    public static ComponentCssHeaderItem forType(final Class<? extends Component> pComponentType, final RuntimeConfigurationType pConfiguration) {
+        ArgUtil.checkNull(pComponentType, "pComponentType"); //$NON-NLS-1$
+        ArgUtil.checkNull(pConfiguration, "pConfiguration"); //$NON-NLS-1$
+        return new ComponentCssHeaderItem(pComponentType, pConfiguration == RuntimeConfigurationType.DEPLOYMENT);
     }
 
     /**

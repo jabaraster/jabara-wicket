@@ -6,6 +6,7 @@ package jabara.wicket;
 import jabara.general.ArgUtil;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
@@ -42,6 +43,17 @@ public class ComponentJavaScriptHeaderItem extends JavaScriptReferenceHeaderItem
     public static ComponentJavaScriptHeaderItem forType(final Class<? extends Component> pComponentType) {
         ArgUtil.checkNull(pComponentType, "pComponentType"); //$NON-NLS-1$
         return new ComponentJavaScriptHeaderItem(pComponentType, false);
+    }
+
+    /**
+     * @param pComponentType -
+     * @param pConfiguration -
+     * @return コンポーネントクラスと同じ場所にある"コンポーネント名.js"を参照するヘッダアイテム.
+     */
+    public static ComponentJavaScriptHeaderItem forType(final Class<? extends Component> pComponentType, final RuntimeConfigurationType pConfiguration) {
+        ArgUtil.checkNull(pComponentType, "pComponentType"); //$NON-NLS-1$
+        ArgUtil.checkNull(pConfiguration, "pConfiguration"); //$NON-NLS-1$
+        return new ComponentJavaScriptHeaderItem(pComponentType, pConfiguration == RuntimeConfigurationType.DEPLOYMENT);
     }
 
     /**
